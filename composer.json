@@ -4,7 +4,7 @@
     "type": "library",
     "require": {
         "yiisoft/yii2": "^2.0",
-        "php": "^7.4 || ^8.0"
+        "php": "^8.0.0 || ^8.1.0 || ^8.2.0"
     },
     "require-dev": {
         "phpunit/phpunit": "^9.5",
@@ -20,7 +20,13 @@
     ],
     "config": {
         "preferred-install": "dist",
-        "sort-packages": true
+        "sort-packages": true,
+        "fxp-asset": {
+            "enabled": false
+        },
+        "allow-plugins": {
+            "yiisoft/yii2-composer": true
+        }
     },
     "autoload": {
         "psr-4": {
@@ -31,5 +37,11 @@
         "psr-4": {
             "particleflux\\yii2blocklist\\tests\\": "tests"
         }
-    }
+    },
+    "repositories": [
+        {
+            "type": "composer",
+            "url": "https://asset-packagist.org"
+        }
+    ]
 }
