@@ -1,2 +1,5 @@
+.phpunit.cache
+build
 composer.lock
+tests/test-results.xml
 vendor
