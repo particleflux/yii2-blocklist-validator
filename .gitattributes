@@ -1,5 +1,5 @@
 /.gitattributes     export-ignore
-/.github
+/.github            export-ignore
 /.gitignore         export-ignore
 /grumphp.yml        export-ignore
 /infection.json5    export-ignore
