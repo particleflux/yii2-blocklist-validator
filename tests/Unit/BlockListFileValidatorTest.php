@@ -5,6 +5,7 @@ namespace particleflux\Yii2Validators\tests\Unit;
 
 use particleflux\Yii2Validators\BlockListFileValidator;
 use particleflux\Yii2Validators\tests\TestCase;
+use yii\base\DynamicModel;
 use yii\base\InvalidConfigException;
 use yii\caching\CacheInterface;
 use yii\caching\FileCache;
@@ -93,15 +94,15 @@ class BlockListFileValidatorTest extends TestCase
 
         // blocked value
         $result = $validator->validateValue('bar');
-        $this->assertSame(['{attribute} "{value}" is blocked'], $result);
+        $this->assertSame(['{attribute} "{value}" is blocked', []], $result);
 
         // another blocked value
         $result = $validator->validateValue('baz');
-        $this->assertSame(['{attribute} "{value}" is blocked'], $result);
+        $this->assertSame(['{attribute} "{value}" is blocked', []], $result);
 
         // another blocked value
         $result = $validator->validateValue('42');
-        $this->assertSame(['{attribute} "{value}" is blocked'], $result);
+        $this->assertSame(['{attribute} "{value}" is blocked', []], $result);
 
         // empty string is _not_ blocked, despite technically being at the end of file
         $result = $validator->validateValue('');
@@ -125,12 +126,12 @@ class BlockListFileValidatorTest extends TestCase
         );
 
         $result = $validator->validateValue('bar');
-        $this->assertSame(['{attribute} "{value}" is blocked'], $result);
+        $this->assertSame(['{attribute} "{value}" is blocked', []], $result);
 
         // unlink the file to verify that validator uses memoization
         unlink($listFile);
         $result = $validator->validateValue('bar');
-        $this->assertSame(['{attribute} "{value}" is blocked'], $result);
+        $this->assertSame(['{attribute} "{value}" is blocked', []], $result);
     }
 
     public function testValidateValueStrict(): void
@@ -145,11 +146,11 @@ class BlockListFileValidatorTest extends TestCase
 
         // blocked value
         $result = $validator->validateValue('bar');
-        $this->assertSame(['{attribute} "{value}" is blocked'], $result);
+        $this->assertSame(['{attribute} "{value}" is blocked', []], $result);
 
         // blocked, correct type
         $result = $validator->validateValue('42');
-        $this->assertSame(['{attribute} "{value}" is blocked'], $result);
+        $this->assertSame(['{attribute} "{value}" is blocked', []], $result);
 
         // not blocked, wrong type
         $result = $validator->validateValue(42);
@@ -174,7 +175,7 @@ class BlockListFileValidatorTest extends TestCase
 
         // blocked value
         $result = $validator->validateValue('bar');
-        $this->assertSame(['{attribute} "{value}" is blocked'], $result);
+        $this->assertSame(['{attribute} "{value}" is blocked', []], $result);
 
         // non blocked value
         $result = $validator->validateValue('foo');
@@ -202,7 +203,7 @@ class BlockListFileValidatorTest extends TestCase
         \Yii::$app->set('cache', $cache);
 
         $result = $validator->validateValue('lorem ipsum');
-        $this->assertSame(['{attribute} "{value}" is blocked'], $result);
+        $this->assertSame(['{attribute} "{value}" is blocked', []], $result);
     }
 
     public function testValidateValueCustomCache(): void
@@ -233,6 +234,33 @@ class BlockListFileValidatorTest extends TestCase
         \Yii::$app->set('cache', $cache);
 
         $result = $validator->validateValue('lorem ipsum');
-        $this->assertSame(['{attribute} "{value}" is blocked'], $result);
+        $this->assertSame(['{attribute} "{value}" is blocked', []], $result);
+    }
+
+    public function testValidationOnModel(): void
+    {
+        $model = new DynamicModel(['word' => null]);
+        $model->addRule(
+            'word',
+            BlockListFileValidator::class,
+            ['file' => $this->listFile]
+        );
+
+        // no value set, it will be skipped due to not being required
+        $this->assertTrue($model->validate());
+
+        // failing validation
+        // @phpstan-ignore-next-line (magic properties via magic setter on purpose)
+        $model->word = 'bar';
+        $this->assertFalse($model->validate());
+        $this->assertTrue($model->hasErrors());
+        $this->assertTrue($model->hasErrors('word'));
+        $this->assertSame(['Word "bar" is blocked'], $model->getErrors('word'));
+
+        // successful validation
+        $model->word = 'foo';
+        $this->assertTrue($model->validate());
+        $this->assertFalse($model->hasErrors());
+        $this->assertCount(0, $model->getErrors());
     }
 }

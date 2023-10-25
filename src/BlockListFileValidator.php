@@ -105,6 +105,7 @@ class BlockListFileValidator extends Validator
         if (in_array($value, $this->blocklist, $this->strict)) {
             return [
                 $this->message,
+                [],
             ];
         }
 
