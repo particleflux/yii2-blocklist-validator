@@ -1,5 +1,7 @@
 # yii2-blocklist-validator
 
+![build](https://github.com/particleflux/yii2-blocklist-validator/actions/workflows/tests.yml/badge.svg)
+
 A Yii2 validator to block certain values
 
 ## Installation
