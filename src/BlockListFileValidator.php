@@ -11,6 +11,8 @@ use yii\validators\Validator;
 /**
  * BlockListFileValidator blocks specific attribute values in given file
  *
+ * The file should contain one blocked value per line.
+ *
  * Usage example:
  *
  *  ```
