@@ -2,6 +2,7 @@
     "name": "particleflux/yii2-blocklist-validator",
     "description": "Validate attributes against a blocklist",
     "type": "library",
+    "prefer-stable": true,
     "require": {
         "php": "~8.1.0 || ~8.2.0",
         "yiisoft/yii2": "^2.0"
