@@ -194,7 +194,7 @@ class BlockListFileValidatorTest extends TestCase
         $cache->expects($this->once())
             ->method('getOrSet')
             ->with(
-                $this->stringStartsWith('particleflux/yii2blocklist'),
+                $this->equalTo('particleflux/yii2blocklist/' . $this->listFile),
                 $this->anything(),
                 $this->equalTo(null)
             )->willReturn(['lorem ipsum']);
