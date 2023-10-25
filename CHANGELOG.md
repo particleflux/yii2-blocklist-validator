@@ -8,6 +8,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 ### Fixed
 - PHP version constraint
+- Remove .github & infection config from dist package
 
 ## [0.0.1] - 2023-10-25
 ### Added

@@ -1,6 +1,8 @@
 /.gitattributes     export-ignore
+/.github
 /.gitignore         export-ignore
 /grumphp.yml        export-ignore
+/infection.json5    export-ignore
 /phpcs.xml          export-ignore
 /phpmd.xml          export-ignore
 /phpstan.neon       export-ignore
