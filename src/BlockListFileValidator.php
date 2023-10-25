@@ -3,11 +3,24 @@ declare(strict_types=1);
 
 namespace particleflux\Yii2Validators;
 
+use yii\base\InvalidConfigException;
+use yii\base\InvalidValueException;
 use yii\caching\CacheInterface;
 use yii\validators\Validator;
 
 /**
- * BlockListFileValidator blocks attribute value in given array
+ * BlockListFileValidator blocks specific attribute values in given file
+ *
+ * Usage example:
+ *
+ *  ```
+ *  public function rules(): array
+ *  {
+ *      return [
+ *          ['username', BlockListFileValidator::class, 'file' => '/tmp/bad-usernames.txt'],
+ *      ];
+ *  }
+ *  ```
  */
 class BlockListFileValidator extends Validator
 {
@@ -17,7 +30,7 @@ class BlockListFileValidator extends Validator
      * @var ?string Filename of blocklist file. Might contain Yii aliases.
      *      File format is: one blocked value per line
      */
-    public ?string $file;
+    public ?string $file = null;
 
     /**
      * @var bool Whether to do strict checking (same-type)
@@ -35,7 +48,7 @@ class BlockListFileValidator extends Validator
     public bool $useCache = true;
 
     /**
-     * @var int|null TTL for the cached values. If set to null, will use defaultDuration of the cache component
+     * @var ?int TTL for the cached values, in seconds. If set to null, will use defaultDuration of the cache component
      */
     public ?int $cacheTtl = null;
 
@@ -53,28 +66,37 @@ class BlockListFileValidator extends Validator
     public function init(): void
     {
         if ($this->file === null) {
-            throw new \InvalidArgumentException('Option file must be set');
+            throw new InvalidConfigException('Option file must be set');
         }
 
-        $this->resolvedFile = \Yii::getAlias($this->file);
-        if (!file_exists($this->resolvedFile)) {
-            throw new \InvalidArgumentException('File does not exist');
+        /** @var string $file phpstan crutch, this cannot be false due to $throw param */
+        $file = \Yii::getAlias($this->file);
+        if (!file_exists($file)) {
+            throw new InvalidConfigException('File does not exist');
         }
+
+        $this->resolvedFile = $file;
     }
 
-    public function validateValue($value)
+    public function validateValue($value): ?array
     {
+        $readFile = function (): array {
+            $lines = file($this->resolvedFile, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
+            if ($lines === false) {
+                throw new InvalidValueException('File reading error');
+            }
+
+            return $lines;
+        };
+
         // cache it also in member property, in case it is called multiple times on the same object
         if ($this->blocklist === []) {
             if ($this->useCache) {
                 /** @var CacheInterface $cache */
                 $cache = \Yii::$app->get($this->cache);
-
-                $this->blocklist = $cache->getOrSet(self::CACHE_KEY_PREFIX . $this->file, function () {
-                    return file($this->resolvedFile, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
-                }, $this->cacheTtl);
+                $this->blocklist = $cache->getOrSet(self::CACHE_KEY_PREFIX . $this->file, $readFile, $this->cacheTtl);
             } else {
-                $this->blocklist = file($this->resolvedFile, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
+                $this->blocklist = $readFile();
             }
         }
 
