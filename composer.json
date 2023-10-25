@@ -4,11 +4,15 @@
     "type": "library",
     "require": {
         "yiisoft/yii2": "^2.0",
-        "php": "^8.0.0 || ^8.1.0 || ^8.2.0"
+        "php": "^8.1.0 || ^8.2.0"
     },
     "require-dev": {
+        "phpcompatibility/php-compatibility": "dev-develop",
+        "phpmd/phpmd": "^2.14",
+        "phpro/grumphp": "^2.1",
+        "phpstan/phpstan": "^1.2",
         "phpunit/phpunit": "^9.5",
-        "phpstan/phpstan": "^1.2"
+        "squizlabs/php_codesniffer": "^3.7"
     },
     "license": "MIT",
     "authors": [
@@ -25,17 +29,19 @@
             "enabled": false
         },
         "allow-plugins": {
-            "yiisoft/yii2-composer": true
+            "yiisoft/yii2-composer": true,
+            "dealerdirect/phpcodesniffer-composer-installer": true,
+            "phpro/grumphp": true
         }
     },
     "autoload": {
         "psr-4": {
-            "particleflux\\yii2blocklist\\": "src"
+            "particleflux\\Yii2Validators\\": "src"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "particleflux\\yii2blocklist\\tests\\": "tests"
+            "particleflux\\Yii2Validators\\tests\\": "tests"
         }
     },
     "repositories": [

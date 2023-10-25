@@ -1,0 +1,38 @@
+grumphp:
+    tasks:
+        composer:
+            file: ./composer.json
+            no_check_all: false
+            no_check_lock: false
+            no_check_publish: false
+            no_local_repository: false
+            with_dependencies: false
+            strict: false
+        file_size:
+            max_size: 1M
+        git_commit_message:
+            allow_empty_message: false
+            enforce_capitalized_subject: true
+            enforce_no_subject_trailing_period: true
+            enforce_single_lined_subject: true
+            max_body_width: 80
+            max_subject_width: 80
+            case_insensitive: false
+            multiline: true
+            additional_modifiers: ''
+        jsonlint:
+            ignore_patterns: [ ]
+            detect_key_conflicts: true
+        phpcs:
+            triggered_by: [php]
+        phpmd:
+            exclude:
+                - tests/
+                - vendor/
+            ruleset: ['phpmd.xml']
+            triggered_by: ['php']
+        phpstan:
+            configuration: phpstan.neon
+            use_grumphp_paths: false
+            triggered_by: ['php']
+

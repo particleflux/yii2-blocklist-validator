@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace particleflux\yii2blocklist;
+namespace particleflux\Yii2Validators;
 
 use yii\caching\CacheInterface;
 use yii\validators\Validator;
