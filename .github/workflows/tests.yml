@@ -51,7 +51,7 @@ jobs:
       uses: actions/cache@v3
       with:
         path: ${{ steps.composer-cache.outputs.dir }}
-        key: ${{ matrix.os }}-composer-${{ hashFiles('**/composer.lock') }}
+        key: ${{ matrix.os }}-composer-${{ hashFiles('**/composer.json') }}
         restore-keys: ${{ matrix.os }}-composer-
 
 
