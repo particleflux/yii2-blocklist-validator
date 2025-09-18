@@ -3,6 +3,7 @@
 ![Packagist Version (custom server)](https://img.shields.io/packagist/v/particleflux/yii2-blocklist-validator)
 ![Packagist PHP Version](https://img.shields.io/packagist/dependency-v/particleflux/yii2-blocklist-validator/php)
 ![build](https://github.com/particleflux/yii2-blocklist-validator/actions/workflows/tests.yml/badge.svg)
+[![codecov](https://codecov.io/gh/particleflux/yii2-blocklist-validator/graph/badge.svg?token=28T2NRU06Y)](https://codecov.io/gh/particleflux/yii2-blocklist-validator)
 
 A Yii2 validator to block certain values
 
