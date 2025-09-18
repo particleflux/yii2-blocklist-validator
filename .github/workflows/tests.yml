@@ -56,3 +56,8 @@ jobs:
       run: |
         export XDEBUG_MODE=coverage
         vendor/bin/phpunit
+
+    - name: Upload coverage to Codecov
+      uses: codecov/codecov-action@v5.5.1
+      env:
+        CODECOV_TOKEN: ${{ secrets.CODECOV_ORG_TOKEN }}
