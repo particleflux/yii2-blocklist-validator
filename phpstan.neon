@@ -9,4 +9,3 @@ parameters:
       - tests/
   bootstrapFiles:
       - tests/bootstrap.php
-  checkMissingIterableValueType: false

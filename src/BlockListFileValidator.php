@@ -62,6 +62,7 @@ class BlockListFileValidator extends Validator
 
     private string $resolvedFile = '';
 
+    /** @var array<string> */
     private array $blocklist = [];
 
 
@@ -80,6 +81,12 @@ class BlockListFileValidator extends Validator
         $this->resolvedFile = $file;
     }
 
+    /**
+     * @inheritDoc
+     *
+     * @return array<mixed>|null
+     * @throws InvalidConfigException
+     */
     public function validateValue($value): ?array
     {
         $readFile = function (): array {
