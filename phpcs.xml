@@ -12,7 +12,7 @@
     <arg name="extensions" value="php" />
 
     <config name="installed_paths" value="vendor/phpcompatibility/php-compatibility" />
-    <config name="testVersion" value="8.1-"/>
+    <config name="testVersion" value="8.2-"/>
 
     <!-- Don't hide tokenizer exceptions -->
     <rule ref="Internal.Tokenizer.Exception">
